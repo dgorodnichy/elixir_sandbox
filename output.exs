@@ -7,24 +7,26 @@ from Elixir"
 # Анонимные функции
 
 add = fn a, b -> a + b end
-IO.puts add.(1, 3)
+add.(1, 3) #=> 4
 
 add_two = fn a -> add.(a, 2) end
-IO.puts add_two.(4)
+add_two.(4) #=> 6
 
-IO.puts (fn x -> "Hey, I'm anonymouse function. I return #{x}" end).("tvoju mamku")
+(fn x -> "Hey, I'm anonymouse function. I return #{x}" end).("tvoju mamku")
+#=> Hey, I'm anonymouse function. I return tvoju mamku
 
 # ========
 # case
 
 case {1, 2, 3} do
   {4, 5, 6} ->
-    IO.puts "This clause won't match"
+    "This clause won't match"
   {1, 2, 3} ->
-    IO.puts "This clause will match and bind x to 2 in this clause"
+    "This clause will match and bind x to 2 in this clause"
   _ ->
-    IO.puts "This clause would match any value"
+    "This clause would match any value"
 end
+#=> This clause will match and bind x to 2 in this clause
 
 # ========
 # _ выступает в роли else
@@ -32,13 +34,12 @@ end
 x = 3
 
 case x do
-  1 -> IO.puts "x = 1"
-  2 -> IO.puts "x = 2"
-  _ -> IO.puts "x not 1 or 2"
+  1 -> "x = 1"
+  2 -> "x = 2"
+  _ -> "x not 1 or 2"
 end
+#=> x not 1 or 2
 
-
-# ========
 # В конструкции case можно использовать
 # закешированное значение используя ^
 
@@ -46,13 +47,13 @@ foo = fn ->
   10
 end
 x = foo.()
-
-IO.puts x
+x #=> 10
 
 case 10 do
-  ^x -> IO.puts "Won't match"
-  _  -> IO.puts "Will match"
+  ^x -> "Won't match"
+  _  -> "Will match"
 end
+#=> Won't match
 
 
 # =========
@@ -60,12 +61,13 @@ end
 
 cond do
   2 + 2 == 5 ->
-    IO.puts "This will not be true"
+    "This will not be true"
   2 * 2 == 3 ->
-    IO.puts "Nor this"
+    "Nor this"
   1 + 1 == 2 ->
-    IO.puts "But this will"
+    "But this will"
 end
+#=> But this will
 
 cond do
   2 + 2 == 5 ->
@@ -75,64 +77,71 @@ cond do
   true ->
     "This is always true (equivalent to else)"
 end
+#=> "This is always true (equivalent to else)"
 
 # любое значение кроме nil и false срабатывает как true
 cond do
   hd([1,2,3]) ->
     "1 is considered as true"
 end
+#=> "1 is considered as true"
 
 # =========
 # if
 
 if true do
-  IO.puts "This works!"
+  "This works!"
 end
+#=> "This works!"
 
 unless true do
-  IO.puts "This not works!"
+  "This not works!"
 end
+#=> nil
 
 if nil do
-  IO.puts "This won't be seen"
+  "This won't be seen"
 else
-  IO.puts "This will"
+  "This will"
 end
+#=> "This will"
 
 # =========
 # do/end blocks
 
-if true, do: IO.puts(1 + 2)
+if true, do: (1 + 2)
+#=> 3
 
 if true do
   a = 1 + 2
-  IO.puts a + 10
+  a + 10
 end
+#=> 13
 
 if true, do: (
   a = 1 + 3
-  IO.puts a + 10
+  a + 10
 )
+#=> 14
 
-IO.puts if false, do: :this, else: :that
+if false, do: :this, else: :that
+#=> :that
 
 # =========
 # Keyword lists
 
 list = [{:a, 1}, {:b, 2}]
-IO.puts list[:a]
+list[:a] #=> 1
 
-foo = list ++ [c: 2]
-bar = [a: 0] ++ foo
-
-IO.inspect bar
+foo = list ++ [c: 2] #=> [a: 1, b: 2, c: 2]
+bar = [a: 0] ++ foo  #=> [a: 0, a: 1, b: 2, c: 2]
 
 # =========
 # Maps
 
 map = %{:a => 1, 2 => :b}
-IO.puts map[:a]
-IO.puts map[2]
+map[:a] #=> 1
+map[2]  #=> :b
 
 # ===========
 # Modules
@@ -158,10 +167,10 @@ defmodule FooMath do
   end
 end
 
-IO.puts FooMath.sum(665, 1)
+FooMath.sum(665, 1) #=> 666
 
-IO.puts FooMath.zero?(0)
-IO.puts FooMath.zero?(1)
+FooMath.zero?(0) #=> true
+FooMath.zero?(1) #=> false
 
 
 # ===========
@@ -170,7 +179,7 @@ IO.puts FooMath.zero?(1)
 func = &Math.sum/2
 # 2 это арность функции.
 
-IO.puts func.(1,3)
+func.(1,3) #=> 4
 
 # можно присваивать целые выражения
 f = &(&1 + &2 + func.(1, 5))
@@ -185,8 +194,8 @@ defmodule Concat do
   end
 end
 
-IO.puts Concat.join("Hello", "world")      #=> Hello world
-IO.puts Concat.join("Hello", "world", "_") #=> Hello_world
+Concat.join("Hello", "world")      #=> Hello world
+Concat.join("Hello", "world", "_") #=> Hello_world
 
 
 defmodule DefaultTest do
@@ -195,8 +204,8 @@ defmodule DefaultTest do
   end
 end
 
-IO.puts DefaultTest.dowork      #=> DefaultTest - hello
-IO.puts DefaultTest.dowork 123  #=> 123
+DefaultTest.dowork      #=> DefaultTest - hello
+DefaultTest.dowork 123  #=> 123
 
 
 # ==========
@@ -205,11 +214,11 @@ IO.puts DefaultTest.dowork 123  #=> 123
 defmodule Recursion do
 
   def greeting(string, n) when n <= 1 do
-    IO.puts string
+    string
   end
 
   def greeting(string, n) do
-    IO.puts string
+    string
     greeting(string, n-1)
   end
 
@@ -230,7 +239,35 @@ defmodule Array do
   end
 end
 
-Array.sum([5,2,3,6,1,7], 0)
+Array.sum([5,2,3,6,1,7], 0) #=> 24
+
+# =============
+# Enumerables
+
+Enum.map([1, 2, 3], fn x -> x * 2 end)
+#=> [2, 4, 6]
+
+Enum.map(%{1 => 2, 3 => 4}, fn {k, v} -> k * v end)
+#=> [2, 12]
+
+# ranges:
+Enum.map(1..4, fn x -> x end)
+#=> [1, 2, 3, 4]
+
+odd? = &(rem(&1, 2) != 0)
+Enum.filter(1..3, odd?)
+#=> [1, 3]
+
+1..100_000 |> Enum.map(&(&1 * 3)) |> Enum.filter(odd?) |> Enum.sum
+#=> 7500000000
+
+Enum.sum(Enum.filter(Enum.map(1..100_000, &(&1 * 3)), odd?))
+#=> 7500000000
 
 
+# ============
+# Streams
+
+1..100_000 |> Stream.map(&(&1 * 3)) |> Stream.filter(odd?) |> Enum.sum
+#=> 7500000000
 
